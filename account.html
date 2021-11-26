@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <title>Group7Project</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Group7Project</a>
+            <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            >
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                <a class="nav-link" href="./index.html">Home</a>
+                </li>
+                <li class="nav-item active">
+                <a class="nav-link" href="#">View account</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./giftList.html">View gift</a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Account</h1>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Personal information</h5>
+                                    <p class="card-text">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p>Username:</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><span id="username"></span> </p>
+                                            </div>
+                                            <script>
+                                                const username = prompt("Enter you username")
+                                                if (username === "" || username === null) {
+                                                    window.location.href = "./index.html"
+                                                }
+                                                else{
+                                                    document.getElementById('username').innerHTML = username
+                                                }
+                                            </script>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary" onclick="updateAccount()">Update my account</button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-danger" onclick="deleteAccount()">Delete my account</button>
+                                            </div>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                Friend list
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="friend_list">
+                                    <tr>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            function updateAccount(){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    const nu = prompt("Enter you new username");
+                    if (nu != "" && nu != null && nu != undefined) {
+                        $.ajax({
+                            url: `http://127.0.0.1:8000/${u}/update_account/`,
+                            method: 'PUT',
+                            data: {
+                                username: nu
+                            },
+                            dataType: 'json',
+                            success: function(data){
+                                $('#username').html(data.username)
+                            },
+                            error: function(data){
+                                alert("Error")
+                            }
+                        })
+                    }
+                }
+            }
+            function deleteAccount(){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/delete_account/`,
+                        method: 'DELETE',
+                        dataType: 'json',
+                        success: function(data){
+                            window.location.href = "./index.html"
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            function removeFriend(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/delete_friend/`,
+                        method: 'DELETE',
+                        dataType: 'json',
+                        data:{
+                            friend_id:id
+                        },
+                        success: function(data){
+                            $(`#account-${id}`).html("Add to friends")
+                            .attr('class','btn btn-primary')
+                            .attr('onclick',`addFriend(${id})`)
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            function addFriend(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/add_friend/`,
+                        method: 'POST',
+                        dataType: 'json',
+                        data:{
+                            friend_id:id
+                        },
+                        success: function(data){
+                            $(`#account-${id}`).html("Remove from friends")
+                            .attr('class','btn btn-danger')
+                            .attr('onclick',`removeFriend(${id})`)
+
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            if(username){
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/'+username,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data){
+                        let notFriends = []
+                        let friendList = data.all_accounts.filter( function( el ) {
+                            if(data.friends.indexOf( el.id ) < 0){ 
+                                notFriends.push( el )
+                                return false;
+                            };
+                            return true;
+                            } );
+                        let html=""
+                        friendList.map(function(item){
+                            $('#friend_list').append(`
+                                <tr account-id='${item.id}'>
+                                    <td>${item.username}</td>
+                                    <td><button id='account-${item.id}' class="btn btn-danger" onclick=removeFriend(${item.id})>Remove from friends</button></td>
+                                </tr>
+                            `)
+                        })
+                        notFriends.map(function(item){
+                            $('#friend_list').append(`
+                                <tr account-id='${item.id}'>
+                                    <td>${item.username}</td>
+                                    <td><button id='account-${item.id}' class="btn btn-primary" onclick=addFriend(${item.id})>Add to friends</button></td>
+                                </tr>
+                            `)
+                        })
+                }
+            })
+        }
+        </script>
+    </body>
+</html>

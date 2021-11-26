@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <title>Group7Project</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Group7Project</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./account.html">View account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./giftList.html">View gift</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+        
+      <div class="mt-4">
+        <div class="form-group">
+          <label for="">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            id="username"
+          />
+        </div>
+        <button type="button" onclick="createAccount()" class="btn btn-primary">
+          Create account
+        </button>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+      function createAccount() {
+        var username = $("#username").val();
+        if (username === "" || username === null || username === undefined) {
+          alert("Please enter your username");
+          return;
+        }
+        $.ajax({
+          url: "http://localhost:8000/create_account/",
+          method:"POST",
+          data: {
+            username: username,
+          },
+          dataType:'json',
+          success: function (data) {
+            alert("Account successfully created");
+          },
+          error: function (data) {
+            alert("Cannot create account with this username. Please try again");
+          }
+        });
+      }
+    </script>
+</body>
+</html>

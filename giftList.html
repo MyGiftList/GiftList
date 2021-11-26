@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <title>Group7Project</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Group7Project</a>
+            <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            >
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                <a class="nav-link" href="./index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="./account.html">View account</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">View gift</a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Gift</h1>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Gift list</h5>
+                                    <p class="card-text">
+                                       
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                              <div class="form-group">
+                                                <label for="">Name</label>
+                                                <input
+                                                  type="text"
+                                                  class="form-control"
+                                                  name="giftListName"
+                                                  id="giftListName"
+                                                />
+                                              </div>
+                                              <button type="button" onclick="createGiftList()" class="btn btn-primary">
+                                                Create gift list
+                                              </button>
+                                            </div>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="giftForm" class="col-md-6">
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                My Gift list
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="my_gift_list">
+                                    <tr>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>
+                                Friend Gift list
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Gift list name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="friend_gift_list">
+                                    <tr>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <div id="detail-container"></div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            function createGiftList() {
+                const u = prompt("Enter you username");
+                var giftListName = $("#giftListName").val();
+
+                if (u != "" && u != null && u != undefined) {
+
+                  $.ajax({
+                      url: `http://127.0.0.1:8000/${u}/create_giftlist/`,
+                      method: "POST",
+                      data: {
+                        giftListName: giftListName,
+                      },
+                      dataType: "json",
+                      success: function(data) {
+                        alert("Create gift list success");
+                        $('#gift_list').append(`
+                            <tr>
+                                <td>${data.name}</td>
+                                <td>
+                                  <button id='gift-${data.id}' class="btn btn-success" onclick=addFriend(${data.id})>View</button>
+                                  <button id='gift-${data.id}' class="btn btn-primary" onclick=addFriend(${data.id})>Edit</button>
+                                  <button id='gift-${data.id}' class="btn btn-danger" onclick=addFriend(${data.id})>Delete</button>
+                                </td>
+                            </tr>
+                        `)
+                      },
+                  });
+              }
+            }
+            function deleteGiftList(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/delete_giftlist/`,
+                        method: 'DELETE',
+                        dataType: 'json',
+                        success: function(data){   
+                          $(`#giftlist-row-${id}`).html("")
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            function deleteGift(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/delete_gift/`,
+                        method: 'DELETE',
+                        dataType: 'json',
+                        success: function(data){   
+                          $(`#gift-row-${id}`).html("")
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            function editGiftList(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                  const newgiftname = prompt("Enter new gift list name");
+                  if (newgiftname != "" && newgiftname != null && newgiftname != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/update_giftlist/`,
+                        method: 'PUT',
+                        dataType: 'json',
+                        data:{
+                            name:newgiftname
+                        },
+                        success: function(data){
+                          $(`#gift-list-name-${id}`).html(data.name)
+
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                  }
+                }
+            }
+            function submitEditGift(id){
+                const u = prompt("Enter you username");
+                const name = $("#giftName").val();
+                const link = $("#giftLink").val();
+                const description = $("#giftDescription").val();
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/update_gift/`,
+                        method: 'PUT',
+                        dataType: 'json',
+                        data:{
+                            name,
+                            link,
+                            description,
+                        },
+                        success: function(data){
+                            $(`#gift-name-${id}`).html(data.name)
+                            $(`#gift-link-${id}`).html(data.link)
+                            $(`#gift-description-${id}`).html(data.description)
+                            $("#giftForm").html('')
+                            alert("Gift successfully updated.")
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+
+            }
+            function editGift(id){
+                
+                $("#giftForm").html(`
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Edit gift</h5>
+                        <p class="card-text">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Name</label>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        name="giftName"
+                                        id="giftName"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Link</label>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        name="giftLink"
+                                        id="giftLink"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Description</label>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        name="giftDescription"
+                                        id="giftDescription"
+                                        />
+                                    </div>
+                                    <button type="button" onclick="submitEditGift(${id})" class="btn btn-primary">
+                                    Edit gift
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </p>
+                    </div>
+                </div>
+                `)
+                
+                $(`#giftName`).val($(`#gift-name-${id}`).html());
+                $(`#giftLink`).val($(`#gift-link-${id}`).html());
+                $(`#giftDescription`).val($(`#gift-description-${id}`).html());
+            //   const u = prompt("Enter you username");
+            //     if (u != "" && u != null && u != undefined) {
+            //       const name = prompt("Enter gift name");
+            //       if (name != "" && name != null && name != undefined) {
+            //         const link = prompt("Enter gift link");
+            //         if (link != "" && link != null && link != undefined) {
+            //           const description = prompt("Enter gift description");
+            //           if (description != "" && description != null && description != undefined) {
+            //             
+            //           }
+            //         }
+            //       }
+            //     }
+            }
+            function submitAddGift(id){
+                const u = prompt("Enter you username");
+                const name = $(`#giftName`).val();
+                const link = $(`#giftLink`).val();
+                const description = $(`#giftDescription`).val();
+                if (u != "" && u != null && u != undefined && name != "" && name != null && name != undefined && link != "" && link != null && link != undefined && description != "" && description != null && description != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/add_gift/`,
+                        method: 'POST',
+                        dataType: 'json',
+                        data:{
+                            name,
+                            link,
+                            description,
+                        },
+                        success: function(data){
+                            $("#giftForm").html('')
+                            alert("Gift successfully added")
+                            
+                        },
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            function addGift(id){
+                $("#giftForm").html(`
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Add gift</h5>
+                        <p class="card-text">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Name</label>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        name="giftName"
+                                        id="giftName"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Link</label>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        name="giftLink"
+                                        id="giftLink"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Description</label>
+                                        <input
+                                        type="text"
+                                        class="form-control"
+                                        name="giftDescription"
+                                        id="giftDescription"
+                                        />
+                                    </div>
+                                    <button type="button" onclick="submitAddGift(${id})" class="btn btn-primary">
+                                    Add gift
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </p>
+                    </div>
+                </div>
+                `)
+            }
+            function viewFriendGiftList(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/`,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data){
+                          let html = `
+                          <div class="card">
+                                    <div class="card-header">
+                                        <h3>
+                                            Gift Details
+                                        </h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Link</th>
+                                                    <th>Description</th>
+                                                    <th>Is claimed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="gift_body">
+                          `;
+                          data.map(item=>{
+                            html+=(` 
+                            <tr id='gift-row-${item.id}' >
+                                <td id='gift-name-${item.id}'>${item.name}</td>
+                                <td id='gift-link-${item.id}'>${item.link}</td>
+                                <td id='gift-description-${item.id}'>${item.description}</td>
+                                <td>${item.is_claimed}</td>
+                            </tr>
+                            `)
+
+                          })
+
+                            html+=`
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>`
+                          $("#detail-container").html(html);
+                        },
+
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            } function viewGiftList(id){
+                const u = prompt("Enter you username");
+                if (u != "" && u != null && u != undefined) {
+                    $.ajax({
+                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/`,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data){
+                          let html = `
+                          <div class="card">
+                                    <div class="card-header">
+                                        <h3>
+                                            Gift Details
+                                        </h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Link</th>
+                                                    <th>Description</th>
+                                                    <th>Is claimed</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="gift_body">
+                          `;
+                          data.map(item=>{
+                            html+=(` 
+                            <tr id='gift-row-${item.id}' >
+                                <td id='gift-name-${item.id}'>${item.name}</td>
+                                <td id='gift-link-${item.id}'>${item.link}</td>
+                                <td id='gift-description-${item.id}'>${item.description}</td>
+                                <td>${item.is_claimed}</td>
+                                <td>
+                                  <button id='gift-${item.id}' class="btn btn-primary" onclick=editGift(${item.id})>Edit</button>
+                                  <button id='gift-${item.id}' class="btn btn-danger" onclick=deleteGift(${item.id})>Delete</button>
+                                </td>
+                            </tr>
+                            `)
+
+                          })
+
+                            html+=`
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>`
+                          $("#detail-container").html(html);
+                        },
+
+                        error: function(data){
+                            alert("Error")
+                        }
+                    })
+                }
+            }
+            const username = prompt("Enter you username");
+            if(username){
+                $.ajax({
+                    url: `http://127.0.0.1:8000/${username}/giftlists/`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data){
+                      data.myGift.map(function(item){
+                        $('#my_gift_list').append(`
+                            <tr id='giftlist-row-${item.id}'>
+                                <td id='gift-list-name-${item.id}'>${item.name}</td>
+                                <td>
+                                  <button class="btn btn-success" onclick=viewGiftList(${item.id})>View</button>
+                                  <button class="btn btn-warning" onclick=editGiftList(${item.id})>Edit</button>
+                                  <button class="btn btn-danger" onclick=deleteGiftList(${item.id})>Delete</button>
+                                  <button class="btn btn-primary" onclick=addGift(${item.id})>Add Gift</button>
+                                </td>
+                            </tr>
+                        `)
+                    })
+                      data.friendsGift.map(function(data){
+                        data.gift_list.map(function(item){
+                            $('#friend_gift_list').append(`
+                                <tr id='giftlist-row-${item.id}'>
+                                    <td id='gift-list-name-${item.id}'>${data.friend}</td>
+                                    <td id='gift-list-name-${item.id}'>${item.name}</td>
+                                    <td>
+                                    <button class="btn btn-success" onclick=viewFriendGiftList(${item.id})>View</button>
+                                    </td>
+                                </tr>
+                            `)
+                    })
+                })
+                }
+            })
+        }else{
+            alert("Enter your username")
+            location.reload()
+        }
+        </script>
+    </body>
+</html>
