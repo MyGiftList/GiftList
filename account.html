@@ -119,7 +119,7 @@
                     const nu = prompt("Enter you new username");
                     if (nu != "" && nu != null && nu != undefined) {
                         $.ajax({
-                            url: `http://127.0.0.1:8000/${u}/update_account/`,
+                            url: `http://giftlist.pythonanywhere.com/${u}/update_account/`,
                             method: 'PUT',
                             data: {
                                 username: nu
@@ -139,7 +139,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/delete_account/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/delete_account/`,
                         method: 'DELETE',
                         dataType: 'json',
                         success: function(data){
@@ -155,7 +155,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/delete_friend/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/delete_friend/`,
                         method: 'DELETE',
                         dataType: 'json',
                         data:{
@@ -176,7 +176,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/add_friend/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/add_friend/`,
                         method: 'POST',
                         dataType: 'json',
                         data:{
@@ -196,7 +196,7 @@
             }
             if(username){
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/'+username,
+                    url: 'http://giftlist.pythonanywhere.com/'+username,
                     method: 'GET',
                     dataType: 'json',
                     success: function(data){
