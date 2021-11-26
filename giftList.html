@@ -144,7 +144,7 @@
                 if (u != "" && u != null && u != undefined) {
 
                   $.ajax({
-                      url: `http://127.0.0.1:8000/${u}/create_giftlist/`,
+                      url: `http://giftlist.pythonanywhere.com/${u}/create_giftlist/`,
                       method: "POST",
                       data: {
                         giftListName: giftListName,
@@ -170,7 +170,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/delete_giftlist/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/delete_giftlist/`,
                         method: 'DELETE',
                         dataType: 'json',
                         success: function(data){   
@@ -186,7 +186,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/delete_gift/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/delete_gift/`,
                         method: 'DELETE',
                         dataType: 'json',
                         success: function(data){   
@@ -204,7 +204,7 @@
                   const newgiftname = prompt("Enter new gift list name");
                   if (newgiftname != "" && newgiftname != null && newgiftname != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/update_giftlist/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/update_giftlist/`,
                         method: 'PUT',
                         dataType: 'json',
                         data:{
@@ -228,7 +228,7 @@
                 const description = $("#giftDescription").val();
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/update_gift/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/update_gift/`,
                         method: 'PUT',
                         dataType: 'json',
                         data:{
@@ -321,7 +321,7 @@
                 const description = $(`#giftDescription`).val();
                 if (u != "" && u != null && u != undefined && name != "" && name != null && name != undefined && link != "" && link != null && link != undefined && description != "" && description != null && description != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/add_gift/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/add_gift/`,
                         method: 'POST',
                         dataType: 'json',
                         data:{
@@ -390,7 +390,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/`,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data){
@@ -442,7 +442,7 @@
                 const u = prompt("Enter you username");
                 if (u != "" && u != null && u != undefined) {
                     $.ajax({
-                        url: `http://127.0.0.1:8000/${u}/giftlists/${id}/`,
+                        url: `http://giftlist.pythonanywhere.com/${u}/giftlists/${id}/`,
                         method: 'GET',
                         dataType: 'json',
                         success: function(data){
@@ -499,7 +499,7 @@
             const username = prompt("Enter you username");
             if(username){
                 $.ajax({
-                    url: `http://127.0.0.1:8000/${username}/giftlists/`,
+                    url: `http://giftlist.pythonanywhere.com/${username}/giftlists/`,
                     method: 'GET',
                     dataType: 'json',
                     success: function(data){
